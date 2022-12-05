@@ -5,7 +5,8 @@ public class Main {
         Car bmw = new Car("BMW ", "Z8 ", 3.0, " Black ", 2021, " Germany");
         Car kia = new Car("Kia ", "Sportage 4th generation ", 2.4, " Red ", 2018, " South Korea");
         Car hyundai = new Car("Hyundai ", "Avante ", 1.6, " Orange ", 2016, " South Korea");
+        Car benz = new Car("Mercedes", "Gelentwagen", 2.5, "Black", 2001, "Germany");
 
-        System.out.println(lada.toString() + "\n" + audi.toString() + "\n" + bmw.toString() + "\n" + kia.toString() + "\n" + hyundai.toString() +  "\n");
+        System.out.println(lada.toString() + "\n" + audi.toString() + "\n" + bmw.toString() + "\n" + kia.toString() + "\n" + hyundai.toString() +  "\n" + benz);
     }
 }
