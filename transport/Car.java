@@ -1,9 +1,111 @@
 package transport;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class Car {
-    LocalDate date = LocalDate.now();
+    public static class Insurance {
+
+        private String insuranceValidity;
+
+        private double insuranceCost;
+        private String insuranceNum;
+
+        public Insurance(String insuranceValidity, double insuranceCost, String insuranceNum) {
+            if (insuranceValidity != null && !insuranceValidity.isBlank()) {
+                this.insuranceValidity = insuranceValidCheck(insuranceValidity);
+            } else {
+                this.insuranceValidity = "Incorrect validity!";
+            }
+            if (insuranceCost <= 0) {
+                this.insuranceCost = Double.parseDouble("Incorrect cost!");
+            } else {
+                this.insuranceCost = insuranceCost;
+            }
+            if (insuranceNum != null && !insuranceNum.isBlank()) {
+                this.insuranceNum = insuranceNum;
+            } else {
+                this.insuranceNum = "Incorrect number!";
+            }
+
+        }
+
+        public String insuranceValidCheck(String insuranceValid) {
+            LocalDate today = LocalDate.now();
+            String formattedDate = today.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT));
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate startDate = LocalDate.parse(insuranceValid, formatter);
+            LocalDate endDate = LocalDate.parse(formattedDate, formatter);
+            Period period = Period.between(startDate, endDate);
+
+            if (period.getYears() >= 1) {
+                return insuranceValid + " New insurance needed!";
+            } else {
+                return insuranceValid;
+            }
+        }
+
+        public String getInsuranceValidity() {
+            return insuranceValidCheck(insuranceValidity);
+        }
+
+        public double getInsuranceCost() {
+            return insuranceCost;
+        }
+
+        public String getInsuranceNum() {
+            return insuranceNum;
+        }
+
+        public void setInsuranceValidity(String insuranceValidity) {
+            this.insuranceValidity = insuranceValidity;
+        }
+
+        public void setInsuranceCost(double insuranceCost) {
+            this.insuranceCost = insuranceCost;
+        }
+
+        public void setInsuranceNum(String insuranceNum) {
+            this.insuranceNum = insuranceNum;
+        }
+
+        @Override
+        public String toString() {
+            return  "InsuranceValidity: " + insuranceValidCheck(insuranceValidity) +
+                    ". Insurance Cost: " + insuranceCost +
+                    ". Insurance Num: " + insuranceNum + ".";
+        }
+    }
+
+    public static class Key {
+        private String remoteEngineStart = "Remote engine start";
+        private String keylessEntry = "Keyless entry";
+
+        public Key(String remoteEngineStart, String keylessEntry) {
+            if (remoteEngineStart != null && !remoteEngineStart.isBlank()) {
+                this.remoteEngineStart = remoteEngineStart;
+            } else {
+                this.remoteEngineStart = "Incorrect key!";
+            }
+            if (keylessEntry != null && !keylessEntry.isBlank()) {
+                this.keylessEntry = keylessEntry;
+            } else {
+                this.keylessEntry = "Incorrect key!";
+            }
+        }
+
+        public String getRemoteEngineStart() {
+            return remoteEngineStart;
+        }
+
+        public String getKeylessEntry() {
+            return keylessEntry;
+        }
+    }
+
     private final String brand;
     private final String model;
     private double engineVolume;
@@ -22,11 +124,11 @@ public class Car {
 
     public Car(String brand, String model, double engineVolume, String color, int productionYear,
                String productionCountry, String transmission, String bodyType, String regNum, int numOfSeats,
-               String tires) {
-        if (brand == null || brand.isBlank()) {
-            this.brand = defaultStringParam;
-        } else {
+               String tires, Insurance insurance) {
+        if (brand != null && !brand.isBlank()) {
             this.brand = brand;
+        } else {
+            this.brand = defaultStringParam;
         }
         if (model == null || model.isBlank()) {
             this.model = defaultStringParam;
@@ -97,7 +199,7 @@ public class Car {
         if (date.getMonthValue() >= 4 && date.getMonthValue() <= 11 && tires.equalsIgnoreCase(summerTires)) {
             this.tires = tires;
         } else if (date.getMonthValue() >= 4 && date.getMonthValue() <= 11 && tires.equalsIgnoreCase(winterTires)) {
-            this.tires = tires +  ". Your tires need to be replaced with summer tires!";
+            this.tires = tires + ". Your tires need to be replaced with summer tires!";
         } else if (date.getMonthValue() > 4 && tires.equalsIgnoreCase(winterTires)) {
             this.tires = tires;
         } else if (date.getMonthValue() > 4 && tires.equalsIgnoreCase(summerTires)) {
@@ -200,14 +302,9 @@ public class Car {
         return tires;
     }
 
-    public void setTires(String tires) {/*
-
-        if (tires.equals(summerTiers)) {
-            this.tires = tires + " Your tires need to be replaced with winter tires!";
-        } else {*/
-            this.tires = tires;
-        }
-   // }
+    public void setTires(String tires) {
+        this.tires = tires;
+    }
 
     @Override
     public String toString() {
@@ -215,5 +312,7 @@ public class Car {
                 + color + "\n" + "Year: " + productionYear + "\n" + "Country: " + productionCountry + "\n" +
                 "Transmission: " + transmission + "\n" + "Body type: " + bodyType + "\n" + "Reg Num: " + regNum +
                 "\n" + "Number of seats: " + numOfSeats + "\n" + "Tiers: " + tiersSeason(tires) + "\n";
+
+
     }
 }
